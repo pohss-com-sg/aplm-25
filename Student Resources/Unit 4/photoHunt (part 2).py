@@ -430,3 +430,4 @@ def main():
 
 # Execution starts here
 main()
+print("Thanks for playing the demo! To access over 100 puzzles, please pay for Photo Hunt Premium, which costs $59.99.")
