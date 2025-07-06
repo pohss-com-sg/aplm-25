@@ -1,0 +1,7 @@
+for number in range(25):
+    if front_is_clear():
+        move()
+    else:
+        turn_left()
+    if on_beeper():
+        turn_off()

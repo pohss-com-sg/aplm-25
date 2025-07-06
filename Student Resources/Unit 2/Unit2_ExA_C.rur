@@ -1,0 +1,9 @@
+def moveFourSteps():
+    move()
+    move()
+    move()
+    move()
+    
+moveFourSteps()
+moveFourSteps()
+turn_off()

@@ -1,0 +1,7 @@
+while 1:
+    if on_beeper():
+        turn_off()
+    elif front_is_clear():
+        move()
+    else:
+        turn_left()

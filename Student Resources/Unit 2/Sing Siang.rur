@@ -1,0 +1,45 @@
+def beeper():
+    while on_beeper():
+        pick_beeper()
+
+def open_door():
+    repeat(move, 5)
+    beeper()
+    turn_left()
+    repeat(move, 2)
+    turn_left()
+    repeat(move, 2)
+    beeper()
+    turn_left()
+    move()
+    turn_left()
+    move()
+    beeper()
+
+def loop_start():
+    open_door()
+    move()
+    repeat(turn_left, 3)
+    move()
+    turn_left()
+    repeat(move, 3)
+    turn_left()
+
+def loop_end():
+    open_door()
+    move()
+    repeat(turn_left, 3)
+    move()
+    turn_left()
+    repeat(move, 2)
+    turn_left()
+    repeat(move, 2)
+    turn_left()
+    move()
+    turn_left()
+    move()
+
+
+repeat(loop_start, 3)
+loop_end()
+turn_off()

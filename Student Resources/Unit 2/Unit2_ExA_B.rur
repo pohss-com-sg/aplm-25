@@ -1,0 +1,2 @@
+repeat(move, 8)
+turn_off()

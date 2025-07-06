@@ -1,0 +1,20 @@
+i = False
+turns = 0
+def turn_right():
+    turn_left()
+    turn_left()
+    turn_left()
+
+while i == False:
+    if on_beeper():
+        i = True
+        turn_off()
+    if front_is_clear():
+        move()
+    else:
+        turn_left()
+        turns = turns + 1
+        print(turns)
+        if turns > 1:
+            turn_right()
+            turns = 0

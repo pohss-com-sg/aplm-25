@@ -1,0 +1,13 @@
+def turn_right():
+    repeat(turn_left, 3)
+
+def collect():
+    repeat(move, 2)
+    turn_left()
+    repeat(move, 2)
+    turn_right()
+    while on_beeper():
+        pick_beeper()
+
+repeat(collect, 4)
+turn_off()
