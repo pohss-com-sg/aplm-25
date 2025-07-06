@@ -6,6 +6,17 @@ import random
 # Some constants defined
 SCREENRECT = Rect(0, 0, 405, 405)
 
+def play_background_music(name, volume=0.5):
+    fullname = os.path.join(util.BASE_DIR, 'data', name)
+    try:
+        pygame.mixer.music.load(fullname)
+    except pygame.error as e:
+        print(f'Cannot load music: {fullname}')
+        raise SystemExit(e)
+    
+    pygame.mixer.music.set_volume(volume)
+    pygame.mixer.music.play(-1)   
+
 
 difficulty_settings = {
     'easy': {
@@ -177,7 +188,7 @@ def settings_menu(screen, music_volume, sfx_volume):
         drawText(screen, "Settings", (150, 120), 'white', 40)
         
         for i, option in enumerate(options):
-            color = 'yellow' if i == selected else 'black'
+            color = 'green' if i == selected else 'black'
             drawText(screen, option, (100, 180 + i * 40), color, 30)
             
         # Draw volume bars
@@ -246,13 +257,13 @@ def title_screen(screen, music_volume=0.5, sfx_volume=0.5, game_start_sound=None
         for i, option in enumerate(menu_fields):
             # Mode field
             pointer = ">" if selected_field == i else " "
-            color = 'yellow' if selected_field == i else 'black'
+            color = 'green' if selected_field == i else 'black'
             drawText(screen, f"{pointer} {option}:", (50, 120 + i * 40), color, 30)
             
             if option == 'Mode':
-                drawText(screen, f"[{mode_options[selected_mode]}]", (200, 120 + i * 40), 'yellow' if selected_field == i else 'gray', 30)
+                drawText(screen, f"[{mode_options[selected_mode]}]", (200, 120 + i * 40), 'green' if selected_field == i else 'gray', 30)
             elif option == 'Difficulty':
-                drawText(screen, f"[{difficulty_options[selected_difficulty]}]", (200, 120 + i * 40), 'yellow' if selected_field == i else 'gray', 30)    
+                drawText(screen, f"[{difficulty_options[selected_difficulty]}]", (200, 120 + i * 40), 'green' if selected_field == i else 'gray', 30)    
         
         # Instructions
         drawText(screen, "SPACE = Start", (110, 300), 'black', 25)
@@ -298,21 +309,7 @@ def title_screen(screen, music_volume=0.5, sfx_volume=0.5, game_start_sound=None
                     elif menu_fields[selected_field] == 'Quit':
                         pygame.quit()
                         exit()
-                    #else:
-                        #if not start_pressed:
-                            #if game_start_sound:
-                                #game_start_sound.set_volume(sfx_volume)
-                                #game_start_sound.play()
-                                #pygame.time.wait(int(game_start_sound.get_length() * 1000))
-                            #start_pressed = True   
-                        #if start_pressed:
-                            #pygame.mixer.music.stop()
-                        #return {
-                            #'players': selected_mode + 1,
-                            #'difficulty': difficulty_options[selected_difficulty],
-                            #'music_volume': music_volume,
-                            #'sfx_volume': sfx_volume,
-                        #}
+
                 
         clock.tick(30)
 
@@ -531,11 +528,7 @@ def handle_robot_death(screen, explode_sound, game_over_sound):
         
     pygame.display.flip()
     pygame.time.wait(2000)
-        
-def play_background_music(music_file, volume=0.5):
-    pygame.mixer.music.load(music_file)
-    pygame.mixer.music.set_volume(volume)
-    pygame.mixer.music.play(-1)  # loop forever    
+    
 
 
 def story_mode(screen, settings):
@@ -600,6 +593,10 @@ def story_mode(screen, settings):
 # Execution starts here
 if __name__ == "__main__":
     pygame.init()
+
+    current_music_volume = 0.5
+    current_sfx_volume = 0.5
+
     shoot_sound = util.load_sound('shoot.wav')
     explode_sound = util.load_sound('explode.wav')
     game_start_sound = util.load_sound('game_start.wav')
@@ -613,12 +610,12 @@ if __name__ == "__main__":
     pygame.display.set_caption('Mice Invasion')
     pygame.mouse.set_visible(0)
     
-    settings = title_screen(screen, music_volume=0.5, sfx_volume=0.5, game_start_sound=game_start_sound)
+    settings = title_screen(screen, music_volume=current_music_volume, sfx_volume=current_sfx_volume, game_start_sound=game_start_sound)
     
     while True:
         start_pressed = False
-        settings = title_screen(screen, music_volume=0.5, sfx_volume=0.5, game_start_sound=game_start_sound)
-        show_story_screens(screen)
+        settings = title_screen(screen, music_volume=settings['music_volume'], sfx_volume=settings['sfx_volume'], game_start_sound=game_start_sound) # Pass updated volumes back in
+        story_mode(screen,settings)
         while True:
             action = main(screen, settings, shoot_sound, explode_sound, game_countdown_sound, bg_gameplay=bg_gameplay)
             if action == 'menu':
